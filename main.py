@@ -16,6 +16,7 @@ async def handler(ws):
             await ws.send("3")
         try:
             msg = json.loads(message.replace("42/general,", ""))
+            print(msg)
             if msg[0] == "rain" and msg[1]['rain']['state'] == "running":
                 amount = msg[1]['rain']['amount']
                 rain_type = msg[1]['rain']['type']
@@ -41,7 +42,7 @@ async def start_client():
     while True:
         try:
             async with websockets.connect("wss://api.rblxroll.com/socket.io/?EIO=4&transport=websocket") as ws:
-                await ws.send("40/general,"+json.dumps({"token":token}))
+                await ws.send("40/general,{}")
                 await handler(ws)
         except websockets.exceptions.ConnectionClosed as e:
             print(f"Connection closed with code {e.code}.")
